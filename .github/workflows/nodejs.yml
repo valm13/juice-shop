@@ -20,22 +20,28 @@ jobs:
     steps:
      - uses: actions/checkout@v2
      
-     - name: Install NPM dependencies
+     - name: use klar
        run: |
-         npm install --production --unsafe-perm
-         
-     - uses: sburris/dependency-check-action@master
-       with:
-         Project-Name: juice-shop
-         Report-Location: '/github/workspace/reports'
-         Log-Name: log.txt
-        
-     - name: SonarCloud Scan
-       uses: sonarsource/sonarcloud-github-action@master
-       env:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}     
-        
+         wget https://github.com/optiopay/klar/releases/download/v2.4.0/klar-2.4.0-linux-amd64 -O klar
+         chmod +x klar
+         CLAIR_ADDR=http://clair.3r1.co:6060 ./klar docker.io/valm13/juice-shop:sha-16995d5
+    
+     #- name: Install NPM dependencies
+     #  run: |
+     #    npm install --production --unsafe-perm
+     #    
+     #- uses: sburris/dependency-check-action@master
+     #  with:
+     #    Project-Name: juice-shop
+     #    Report-Location: '/github/workspace/reports'
+     #    Log-Name: log.txt
+     #   
+     #- name: SonarCloud Scan
+     #  uses: sonarsource/sonarcloud-github-action@master
+     #  env:
+     #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+     #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}     
+     
      - name: build-push
        uses: docker/build-push-action@v1
        with:

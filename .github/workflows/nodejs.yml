@@ -28,3 +28,19 @@ jobs:
          repository: valm13/juice-shop
          tags: juice-shop
          tag_with_sha: true
+
+     - name: prepare-kustomize
+       run: |
+         sed -i "s#IMAGE_NAME#valm13/juice-shop#g" kustomization.yaml
+         sed -i "s/IMAGE_TAG/sha-$(git rev-parse --short HEAD)/g" kustomization.yaml
+         cat kustomization.yaml
+
+     - name: deploy-to-k8s
+       run: |
+         aws configure set default.region us-east-1
+         aws configure set default.output json
+         aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+         aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+         aws configure set aws_session_token ${{ secrets.AWS_SESSION_TOKEN }}
+         aws eks update-kubeconfig --name isen-2
+         kubectl kustomize . | kubectl apply -f -

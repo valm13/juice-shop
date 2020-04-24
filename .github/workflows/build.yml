@@ -53,11 +53,11 @@ jobs:
          tags: juice-shop
          tag_with_sha: true
      
-     - name: use klar
-       run: |
-         wget https://github.com/optiopay/klar/releases/download/v2.4.0/klar-2.4.0-linux-amd64 -O klar
-         chmod +x klar
-         CLAIR_ADDR=http://clair.3r1.co:6060 ./klar valm13/juice-shop:sha-$(git rev-parse --short HEAD)
+     #- name: use klar
+       #run: |
+         #wget https://github.com/optiopay/klar/releases/download/v2.4.0/klar-2.4.0-linux-amd64 -O klar
+         #chmod +x klar
+         #CLAIR_ADDR=http://clair.3r1.co:6060 ./klar valm13/juice-shop:sha-$(git rev-parse --short HEAD)
 
      - name: prepare-kustomize
        run: |
